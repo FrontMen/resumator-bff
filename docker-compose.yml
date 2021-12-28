@@ -1,0 +1,33 @@
+version: '3.6'
+
+services:
+  mongodb:
+    image: mongo
+    container_name: "mongodb"
+    networks:
+      - databases
+    volumes:
+      - "./_databases/mongodb/mongo-data:/data/db"
+    ports:
+      - 27017:27017
+    command: mongod
+  api:
+    build:
+      context: ./api
+    volumes:
+      - ./.git:/usr/src/.git
+      - ./api:/usr/src/api
+      - /usr/src/api/node_modules
+    depends_on:
+      - mongodb
+    ports:
+      - "2999:2999"
+      - "9229:9229"
+    environment:
+      WAIT_HOSTS: mongodb:27017
+    networks:
+      - api
+      - databases
+networks:
+  databases:
+  api:
