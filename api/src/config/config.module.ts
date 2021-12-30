@@ -1,8 +1,8 @@
-import { Global, Module } from '@nestjs/common'
-import * as dotenv from 'dotenv'
-import { ConfigService } from './config.service'
+import { Global, Module } from '@nestjs/common';
+import * as dotenv from 'dotenv';
+import { ConfigService } from './config.service';
 
-dotenv.config()
+dotenv.config();
 @Global()
 @Module({
   providers: [ConfigService],
