@@ -10,6 +10,14 @@ import { IsOptional } from 'class-validator';
 
 export type UserDocument = User & Document;
 
+export class UserSkill {
+  @Prop({ required: true, unique: true })
+  name: string;
+
+  @Prop({ required: true, default: true })
+  isActive: boolean;
+}
+
 @BaseSchema()
 export class User extends Base {
   @Prop({ required: true, unique: true })
@@ -30,6 +38,14 @@ export class User extends Base {
     ref: Role.name
   })
   role: Role | string;
+
+  @Prop({
+    default: []
+  })
+  skills?: UserSkill[];
+
+  @Prop({ required: false, default: false })
+  deactivated: boolean;
 }
 
 export const UserEntity = SchemaFactory.createForClass(User);

@@ -9,6 +9,7 @@ import { ConfigService } from './config/config.service';
 import { UsersModule } from './app/users/users.module';
 import { RolesModule } from './app/roles/roles.module';
 import { AuthModule } from './app/auth/auth.module';
+import { SkillsModule } from './app/skills/skills.module';
 
 @Module({
   controllers: [],
@@ -26,7 +27,8 @@ import { AuthModule } from './app/auth/auth.module';
     }),
     UsersModule,
     RolesModule,
-    AuthModule
+    AuthModule,
+    SkillsModule
   ]
 })
 export class AppModule {}

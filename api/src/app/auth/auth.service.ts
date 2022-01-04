@@ -55,7 +55,8 @@ export class AuthService {
     const createdUser = await this.userService.create({
       ...signUpDto,
       password: hashedPassword,
-      role: foundRole.id
+      role: foundRole.id,
+      deactivated: false
     });
 
     const token = this.jwtService.sign(
