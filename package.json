@@ -1,0 +1,9 @@
+{
+  "name": "resumator-api",
+  "version": "1.0.0",
+  "repository": "git@github.com:FrontMen/resumator-bff.git",
+  "author": "Frontmen",
+  "scripts": {
+    "dev": "docker-compose up --build"
+  }
+}

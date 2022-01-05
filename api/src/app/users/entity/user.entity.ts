@@ -7,6 +7,7 @@ import { Base, BaseSchema } from '../../../decorators';
 // entity
 import { Role } from '../../roles/entity/role.entity';
 import { IsOptional } from 'class-validator';
+import { Resume } from '../../resumes/entity/resume.entity';
 
 export type UserDocument = User & Document;
 
@@ -38,6 +39,13 @@ export class User extends Base {
     ref: Role.name
   })
   role: Role | string;
+
+  @Prop({
+    default: {},
+    type: SchemaTypes.ObjectId,
+    ref: Resume.name
+  })
+  resume?: Resume;
 
   @Prop({
     default: []

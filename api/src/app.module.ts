@@ -10,6 +10,7 @@ import { UsersModule } from './app/users/users.module';
 import { RolesModule } from './app/roles/roles.module';
 import { AuthModule } from './app/auth/auth.module';
 import { SkillsModule } from './app/skills/skills.module';
+import { ResumesModule } from './app/resumes/resumes.module';
 
 @Module({
   controllers: [],
@@ -28,7 +29,8 @@ import { SkillsModule } from './app/skills/skills.module';
     UsersModule,
     RolesModule,
     AuthModule,
-    SkillsModule
+    SkillsModule,
+    ResumesModule
   ]
 })
 export class AppModule {}

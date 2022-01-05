@@ -10,6 +10,12 @@ import {
 } from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 
+// interface
+import { APIQuery } from '../../interface';
+
+// constants
+import { usersQuerySwagger } from './constants';
+
 // entity
 import { User } from './entity/user.entity';
 
@@ -20,27 +26,14 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-// TODO: Create folder for enums and interface
-enum UserStatusEnums {
-  deactivated = 'yes'
-}
-
-export interface Query {
-  deactivated: string;
-}
-
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @ApiQuery({
-    name: 'deactivated',
-    enum: UserStatusEnums,
-    required: false
-  })
+  @ApiQuery(usersQuerySwagger)
   @Get()
-  async getAll(@Query() query: Query): Promise<User[]> {
+  async getAll(@Query() query: APIQuery): Promise<User[]> {
     return this.usersService.getAll(query);
   }
 

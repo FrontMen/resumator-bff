@@ -52,6 +52,7 @@ export class AuthService {
 
     const foundRole = await this.rolesService.getOneByName('employees');
 
+    // TODO: SING UP CHANGE
     const createdUser = await this.userService.create({
       ...signUpDto,
       password: hashedPassword,

@@ -9,18 +9,24 @@ import { Model } from 'mongoose';
 // entity
 import { User, UserDocument } from './entity/user.entity';
 
+// service
+import { ResumesService } from '../resumes/resumes.service';
+
 // dto
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-// interface
-import { Query } from './users.controller';
+// enum
+import { APIQuery } from '../../interface';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private readonly resumesService: ResumesService
+  ) {}
 
-  async getAll(query: Query): Promise<User[]> {
+  async getAll(query: APIQuery): Promise<User[]> {
     return this.userModel
       .find({ deactivated: !!query.deactivated })
       .populate('role')
@@ -34,7 +40,9 @@ export class UsersService {
       throw new ConflictException('User already exist');
     }
 
-    return new this.userModel({ ...createUserDto }).save();
+    const resume = await this.resumesService.create();
+
+    return new this.userModel({ ...createUserDto, resume: resume.id }).save();
   }
 
   async findUserByEmail(email: string): Promise<User> {
