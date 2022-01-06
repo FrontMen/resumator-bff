@@ -5,8 +5,17 @@ import { Model, Types } from 'mongoose';
 // entity
 import { Resume, ResumeDocument } from './entity/resume.entity';
 
+// utils
+import { stringToObjectId } from '../../utils';
+
 // dto
-import { EducationDto, CreateResumeDto } from './dto';
+import {
+  EducationDto,
+  CreateResumeDto,
+  ExperienceDto,
+  ProjectDto
+} from './dto';
+import { generateSetUpdateObject } from '../../utils/generateSetUpdateObject';
 
 @Injectable()
 export class ResumesService {
@@ -35,17 +44,123 @@ export class ResumesService {
     return foundResume;
   }
 
+  async updateOne(id: string, updateResumeDto) {
+    await this.findOneResume(id);
+
+    await this.resumeModel.findOneAndUpdate(
+      { _id: id },
+      { ...updateResumeDto },
+      { new: true }
+    );
+  }
+
+  // EDUCATION PART
   async addEducation(
     id: string,
+    key: string,
     addEducationDto: EducationDto
+  ): Promise<Resume> {
+    return this.addSubDocument(id, key, addEducationDto);
+  }
+
+  async updateEducation(
+    id: string,
+    key: string,
+    updateEducationDto: EducationDto
+  ): Promise<Resume> {
+    return this.updateSubDocumentDetail(id, key, updateEducationDto);
+  }
+
+  async updateEducations(
+    id: string,
+    key: string,
+    updateEducationsDto: EducationDto[]
+  ): Promise<Resume> {
+    await this.findOneResume(id);
+
+    return this.updateSubDocument(id, key, updateEducationsDto);
+  }
+
+  async deleteEducation(id: string, key: string): Promise<Resume> {
+    return this.deleteSubDocument(id, key);
+  }
+
+  // EXPERIENCE PART
+  async addExperience(
+    id: string,
+    key: string,
+    addExperienceDto: ExperienceDto
+  ): Promise<Resume> {
+    return this.addSubDocument(id, key, addExperienceDto);
+  }
+
+  async updateExperience(
+    id: string,
+    key: string,
+    updateExperienceDto: ExperienceDto
+  ): Promise<Resume> {
+    return this.updateSubDocumentDetail(id, key, updateExperienceDto);
+  }
+
+  async updateExperiences(
+    id: string,
+    key: string,
+    updateExperienceDto: ExperienceDto[]
+  ): Promise<Resume> {
+    await this.findOneResume(id);
+
+    return this.updateSubDocument(id, key, updateExperienceDto);
+  }
+
+  async deleteExperience(id: string, key: string): Promise<Resume> {
+    return this.deleteSubDocument(id, key);
+  }
+
+  // PROJECTS PART
+  async addProject(
+    id: string,
+    key: string,
+    addProjectDto: ProjectDto
+  ): Promise<Resume> {
+    return this.addSubDocument(id, key, addProjectDto);
+  }
+
+  async updateProject(
+    id: string,
+    key: string,
+    updateProjectDto: ProjectDto
+  ): Promise<Resume> {
+    return this.updateSubDocumentDetail(id, key, updateProjectDto);
+  }
+
+  async updateProjects(
+    id: string,
+    key: string,
+    updateProjectDto: ProjectDto[]
+  ): Promise<Resume> {
+    await this.findOneResume(id);
+
+    return this.updateSubDocument(id, key, updateProjectDto);
+  }
+
+  async deleteProject(id: string, key: string): Promise<Resume> {
+    return this.deleteSubDocument(id, key);
+  }
+
+  // UNIVERSAL THING FOR ADD SUB DOCUMENT IN RESUME
+  // TODO: FIX ANY TYPE
+  private async addSubDocument(
+    id: string,
+    key: string,
+    data: any
   ): Promise<Resume> {
     return this.resumeModel.findOneAndUpdate(
       { _id: id },
       {
         $push: {
-          education: {
+          [key]: {
             id: new Types.ObjectId(),
-            ...addEducationDto
+            ...data
           }
         }
       },
@@ -53,55 +168,42 @@ export class ResumesService {
     );
   }
 
-  async updateEducation(
+  private async updateSubDocumentDetail(
     id: string,
-    updateEducationDto: EducationDto
+    key: string,
+    data: any
   ): Promise<Resume> {
     return this.resumeModel.findOneAndUpdate(
       {
-        'education.id': new Types.ObjectId(id)
+        [`${key}.id`]: stringToObjectId(id)
       },
       {
         $set: {
-          'education.$.institute': updateEducationDto.institute,
-          'education.$.name': updateEducationDto.name,
-          'education.$.startDate': updateEducationDto.startDate,
-          'education.$.endDate': updateEducationDto.endDate
+          ...generateSetUpdateObject(data, key)
         }
       },
       { new: true }
     );
   }
 
-  async updateEducations(
+  private async updateSubDocument(
     id: string,
-    updateEducationsDto: EducationDto[]
+    key: string,
+    data: any
   ): Promise<Resume> {
-    await this.findOneResume(id);
-
     return this.resumeModel.findOneAndUpdate(
       { _id: id },
-      { $set: { education: updateEducationsDto } },
+      { $set: { [key]: data } },
       { new: true }
     );
   }
 
-  async deleteEducation(id: string): Promise<Resume> {
+  private async deleteSubDocument(id: string, key: string): Promise<Resume> {
     return this.resumeModel.findOneAndUpdate(
       {},
       {
-        $pull: { education: { id: new Types.ObjectId(id) } }
+        $pull: { [key]: { id: stringToObjectId(id) } }
       },
-      { new: true }
-    );
-  }
-
-  async updateOne(id: string, updateResumeDto) {
-    await this.findOneResume(id);
-
-    await this.resumeModel.findOneAndUpdate(
-      { _id: id },
-      { ...updateResumeDto },
       { new: true }
     );
   }

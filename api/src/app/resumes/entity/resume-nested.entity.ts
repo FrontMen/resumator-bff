@@ -5,8 +5,19 @@ import {
   IsString,
   IsUrl,
   MaxLength,
-  MinLength
+  MinLength,
+  ValidateNested
 } from 'class-validator';
+import { Prop } from '@nestjs/mongoose';
+import { Type } from 'class-transformer';
+
+export class Stack {
+  @IsBoolean()
+  isActive: boolean;
+
+  @IsString()
+  name: string;
+}
 
 export class Education {
   @IsDateString()
@@ -47,14 +58,11 @@ export class Experience {
   @MaxLength(30)
   @IsString()
   role: string;
-}
 
-export class Stack {
-  @IsBoolean()
-  isActive: boolean;
-
-  @IsString()
-  name: string;
+  @Prop({ required: false })
+  @ValidateNested({ each: true })
+  @Type(() => Stack)
+  skills: Stack[];
 }
 
 export class Publication {
@@ -88,6 +96,11 @@ export class SideProject {
   @MaxLength(20)
   @IsString()
   title: string;
+
+  @Prop({ required: false })
+  @ValidateNested({ each: true })
+  @Type(() => Stack)
+  skills: Stack[];
 }
 
 export class SocialLink {

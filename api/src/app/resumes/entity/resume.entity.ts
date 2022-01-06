@@ -16,7 +16,6 @@ import {
   Education,
   SideProject,
   SocialLink,
-  Stack,
   Publication,
   Experience
 } from './resume-nested.entity';
@@ -39,11 +38,6 @@ export class Resume extends Base {
   @ValidateNested({ each: true })
   @Type(() => Experience)
   projects: Experience[];
-
-  @Prop({ required: false })
-  @ValidateNested({ each: true })
-  @Type(() => Stack)
-  skills: Stack[];
 
   @Prop({ required: false })
   @ValidateNested({ each: true })
