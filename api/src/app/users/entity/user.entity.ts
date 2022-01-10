@@ -8,12 +8,13 @@ import { Base, BaseSchema } from '../../../decorators';
 import { Role } from '../../roles/entity/role.entity';
 import { IsOptional } from 'class-validator';
 import { Resume } from '../../resumes/entity/resume.entity';
+import { Skill } from '../../skills/entity/skill.entity';
 
 export type UserDocument = User & Document;
 
 export class UserSkill {
-  @Prop({ required: true, unique: true })
-  name: string;
+  @Prop({ required: true, unique: true, ref: Skill.name })
+  skillId: Skill;
 
   @Prop({ required: true, default: true })
   isActive: boolean;

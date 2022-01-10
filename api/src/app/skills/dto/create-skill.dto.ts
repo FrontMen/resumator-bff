@@ -8,3 +8,5 @@ export class CreateSkillDto extends OmitType(Skill, [
   'createdAt',
   'updatedAt'
 ]) {}
+
+export class UpdateSkillDto extends CreateSkillDto {}

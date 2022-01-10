@@ -10,6 +10,10 @@ import {
 } from 'class-validator';
 import { Prop } from '@nestjs/mongoose';
 import { Type } from 'class-transformer';
+import { SchemaTypes } from 'mongoose';
+
+// entity
+import { Skill } from '../../skills/entity/skill.entity';
 
 export class Stack {
   @IsBoolean()
@@ -111,4 +115,17 @@ export class SocialLink {
   @MaxLength(20)
   @IsString()
   linkType: string;
+}
+
+export class SkillList {
+  @Prop({
+    required: true,
+    type: SchemaTypes.ObjectId,
+    unique: true,
+    ref: Skill.name
+  })
+  skill: Skill;
+
+  @Prop({ required: true, default: true })
+  isActive: boolean;
 }

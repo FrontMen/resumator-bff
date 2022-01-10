@@ -18,6 +18,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 // enum
 import { APIQuery } from '../../interface';
+import { Skill } from '../skills/entity/skill.entity';
 
 @Injectable()
 export class UsersService {
@@ -29,7 +30,20 @@ export class UsersService {
   async getAll(query: APIQuery): Promise<User[]> {
     return this.userModel
       .find({ deactivated: !!query.deactivated })
-      .populate('role')
+      .populate([
+        'role',
+        'resume',
+        {
+          path: 'resume',
+          populate: {
+            path: 'skills',
+            populate: {
+              path: 'skill',
+              model: Skill.name
+            }
+          }
+        }
+      ])
       .select('-deactivated');
   }
 

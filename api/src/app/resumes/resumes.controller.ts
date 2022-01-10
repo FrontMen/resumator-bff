@@ -5,23 +5,28 @@ import {
   Get,
   Param,
   Patch,
-  Post,
-  Req
+  Post
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiImplicitBody } from '@nestjs/swagger/dist/decorators/api-implicit-body.decorator';
-import { Request } from 'express';
 
 // dto
-import { EducationDto, CreateResumeDto, ProjectDto } from './dto';
+import {
+  EducationDto,
+  CreateResumeDto,
+  ProjectDto,
+  ExperienceDto,
+  PublicationDto
+} from './dto';
 
 // service
 import { ResumesService } from './resumes.service';
 
 // entity
 import { Resume } from './entity/resume.entity';
-import { ExperienceDto } from './dto/experience.dto';
-import { getWordFromEndpoint } from '../../utils';
+import { SideProjectsDto } from './dto/side-projects.dto';
+import { SocialLinksDto } from './dto/social-links.dto';
+import { SkillDto } from './dto/skill.dto';
 
 @ApiTags('Resumes')
 @Controller('resumes')
@@ -31,6 +36,11 @@ export class ResumesController {
   @Get()
   async getAll(): Promise<Resume[]> {
     return this.resumesService.getAll();
+  }
+
+  @Get(':id')
+  async getOne(@Param('id') id: string): Promise<Resume> {
+    return this.resumesService.findOneResume(id);
   }
 
   @Post()
@@ -49,16 +59,10 @@ export class ResumesController {
   // EDUCATION PART
   @Post('/:resumeId/education')
   async addEducation(
-    @Req() request: Request,
     @Param('resumeId') resumeId: string,
     @Body() addEducationDto: EducationDto
   ): Promise<Resume> {
-    const endpoint = getWordFromEndpoint(request.route.path, 2);
-    return this.resumesService.addEducation(
-      resumeId,
-      endpoint,
-      addEducationDto
-    );
+    return this.resumesService.addEducation(resumeId, addEducationDto);
   }
 
   @ApiOperation({
@@ -66,16 +70,10 @@ export class ResumesController {
   })
   @Patch('/education/:id')
   async updateEducation(
-    @Req() request: Request,
     @Param('id') id: string,
     @Body() updateEducationDto: EducationDto
   ): Promise<Resume> {
-    const endpoint = getWordFromEndpoint(request.route.path, 1);
-    return this.resumesService.updateEducation(
-      id,
-      endpoint,
-      updateEducationDto
-    );
+    return this.resumesService.updateEducation(id, updateEducationDto);
   }
 
   @ApiOperation({
@@ -88,40 +86,24 @@ export class ResumesController {
   })
   @Patch('/:resumeId/education')
   async updateEducations(
-    @Req() request: Request,
     @Param('resumeId') resumeId: string,
     @Body() updateEducationDto: EducationDto[]
   ): Promise<Resume> {
-    const endpoint = getWordFromEndpoint(request.route.path, 2);
-    return this.resumesService.updateEducations(
-      resumeId,
-      endpoint,
-      updateEducationDto
-    );
+    return this.resumesService.updateEducations(resumeId, updateEducationDto);
   }
 
   @Delete('/education/:id')
-  async deleteEducation(
-    @Req() request: Request,
-    @Param('id') id: string
-  ): Promise<Resume> {
-    const endpoint = getWordFromEndpoint(request.route.path, 1);
-    return this.resumesService.deleteEducation(id, endpoint);
+  async deleteEducation(@Param('id') id: string): Promise<Resume> {
+    return this.resumesService.deleteEducation(id);
   }
 
   // EXPERIENCE PART
   @Post('/:resumeId/experience')
   async addExperience(
-    @Req() request: Request,
     @Param('resumeId') resumeId: string,
     @Body() addExperienceDto: ExperienceDto
   ): Promise<Resume> {
-    const endpoint = getWordFromEndpoint(request.route.path, 2);
-    return this.resumesService.addExperience(
-      resumeId,
-      endpoint,
-      addExperienceDto
-    );
+    return this.resumesService.addExperience(resumeId, addExperienceDto);
   }
 
   @ApiOperation({
@@ -129,16 +111,10 @@ export class ResumesController {
   })
   @Patch('/experience/:id')
   async updateExperience(
-    @Req() request: Request,
     @Param('id') id: string,
     @Body() updateExperienceDto: ExperienceDto
   ): Promise<Resume> {
-    const endpoint = getWordFromEndpoint(request.route.path, 1);
-    return this.resumesService.updateExperience(
-      id,
-      endpoint,
-      updateExperienceDto
-    );
+    return this.resumesService.updateExperience(id, updateExperienceDto);
   }
 
   @ApiOperation({
@@ -151,36 +127,24 @@ export class ResumesController {
   })
   @Patch('/:resumeId/experience')
   async updateExperiences(
-    @Req() request: Request,
     @Param('resumeId') resumeId: string,
     @Body() updateExperienceDto: ExperienceDto[]
   ): Promise<Resume> {
-    const endpoint = getWordFromEndpoint(request.route.path, 2);
-    return this.resumesService.updateExperiences(
-      resumeId,
-      endpoint,
-      updateExperienceDto
-    );
+    return this.resumesService.updateExperiences(resumeId, updateExperienceDto);
   }
 
   @Delete('/experience/:id')
-  async deleteExperience(
-    @Req() request: Request,
-    @Param('id') id: string
-  ): Promise<Resume> {
-    const endpoint = getWordFromEndpoint(request.route.path, 1);
-    return this.resumesService.deleteExperience(id, endpoint);
+  async deleteExperience(@Param('id') id: string): Promise<Resume> {
+    return this.resumesService.deleteExperience(id);
   }
 
   // PROJECTS PART
   @Post('/:resumeId/projects')
   async addProject(
-    @Req() request: Request,
     @Param('resumeId') resumeId: string,
     @Body() addProjectDto: ProjectDto
   ): Promise<Resume> {
-    const endpoint = getWordFromEndpoint(request.route.path, 2);
-    return this.resumesService.addProject(resumeId, endpoint, addProjectDto);
+    return this.resumesService.addProject(resumeId, addProjectDto);
   }
 
   @ApiOperation({
@@ -188,12 +152,10 @@ export class ResumesController {
   })
   @Patch('/projects/:id')
   async updateProject(
-    @Req() request: Request,
     @Param('id') id: string,
     @Body() updateProjectDto: ProjectDto
   ): Promise<Resume> {
-    const endpoint = getWordFromEndpoint(request.route.path, 1);
-    return this.resumesService.updateProject(id, endpoint, updateProjectDto);
+    return this.resumesService.updateProject(id, updateProjectDto);
   }
 
   @ApiOperation({
@@ -206,24 +168,184 @@ export class ResumesController {
   })
   @Patch('/:resumeId/projects')
   async updateProjects(
-    @Req() request: Request,
     @Param('resumeId') resumeId: string,
     @Body() updateProjectDto: ProjectDto[]
   ): Promise<Resume> {
-    const endpoint = getWordFromEndpoint(request.route.path, 2);
-    return this.resumesService.updateProjects(
-      resumeId,
-      endpoint,
-      updateProjectDto
-    );
+    return this.resumesService.updateProjects(resumeId, updateProjectDto);
   }
 
   @Delete('/projects/:id')
-  async deleteProject(
-    @Req() request: Request,
-    @Param('id') id: string
+  async deleteProject(@Param('id') id: string): Promise<Resume> {
+    return this.resumesService.deleteProject(id);
+  }
+
+  // PUBLICATIONS PART
+  @Post('/:resumeId/publications')
+  async addPublication(
+    @Param('resumeId') resumeId: string,
+    @Body() addPublicationDto: PublicationDto
   ): Promise<Resume> {
-    const endpoint = getWordFromEndpoint(request.route.path, 1);
-    return this.resumesService.deleteProject(id, endpoint);
+    return this.resumesService.addPublication(resumeId, addPublicationDto);
+  }
+
+  @ApiOperation({
+    summary: 'Use this endpoint for update one publication details'
+  })
+  @Patch('/publications/:id')
+  async updatePublication(
+    @Param('id') id: string,
+    @Body() updatePublicationDto: PublicationDto
+  ): Promise<Resume> {
+    return this.resumesService.updatePublication(id, updatePublicationDto);
+  }
+
+  @ApiOperation({
+    summary: 'Use this endpoint for update publications with drag and drop'
+  })
+  @ApiImplicitBody({
+    name: 'body',
+    type: [PublicationDto],
+    content: {}
+  })
+  @Patch('/:resumeId/publications')
+  async updatePublications(
+    @Param('resumeId') resumeId: string,
+    @Body() updatePublicationDto: PublicationDto[]
+  ): Promise<Resume> {
+    return this.resumesService.updatePublications(
+      resumeId,
+      updatePublicationDto
+    );
+  }
+
+  @Delete('/publications/:id')
+  async deletePublication(@Param('id') id: string): Promise<Resume> {
+    return this.resumesService.deletePublication(id);
+  }
+
+  // PUBLICATIONS PART
+  @Post('/:resumeId/side-projects')
+  async addSideProject(
+    @Param('resumeId') resumeId: string,
+    @Body() addSideProjectDto: SideProjectsDto
+  ): Promise<Resume> {
+    return this.resumesService.addSideProject(resumeId, addSideProjectDto);
+  }
+
+  @ApiOperation({
+    summary: 'Use this endpoint for update one side project details'
+  })
+  @Patch('/side-projects/:id')
+  async updateSideProject(
+    @Param('id') id: string,
+    @Body() updateSideProjectDto: SideProjectsDto
+  ): Promise<Resume> {
+    return this.resumesService.updateSideProject(id, updateSideProjectDto);
+  }
+
+  @ApiOperation({
+    summary: 'Use this endpoint for update side projects with drag and drop'
+  })
+  @ApiImplicitBody({
+    name: 'body',
+    type: [SideProjectsDto],
+    content: {}
+  })
+  @Patch('/:resumeId/side-projects')
+  async updateSideProjects(
+    @Param('resumeId') resumeId: string,
+    @Body() updateSideProjectDto: SideProjectsDto[]
+  ): Promise<Resume> {
+    return this.resumesService.updateSideProjects(
+      resumeId,
+      updateSideProjectDto
+    );
+  }
+
+  @Delete('/side-projects/:id')
+  async deleteSideProject(@Param('id') id: string): Promise<Resume> {
+    return this.resumesService.deleteSideProjects(id);
+  }
+
+  // SOCIAL-LINKS PART
+  @Post('/:resumeId/social-links')
+  async addSocialLink(
+    @Param('resumeId') resumeId: string,
+    @Body() addSocialLinkDto: SocialLinksDto
+  ): Promise<Resume> {
+    return this.resumesService.addSocialLink(resumeId, addSocialLinkDto);
+  }
+
+  @ApiOperation({
+    summary: 'Use this endpoint for update one social link details'
+  })
+  @Patch('/social-links/:id')
+  async updateSocialLink(
+    @Param('id') id: string,
+    @Body() updateSocialLinkDto: SocialLinksDto
+  ): Promise<Resume> {
+    return this.resumesService.updateSocialLink(id, updateSocialLinkDto);
+  }
+
+  @ApiOperation({
+    summary: 'Use this endpoint for update side social links with drag and drop'
+  })
+  @ApiImplicitBody({
+    name: 'body',
+    type: [SocialLinksDto],
+    content: {}
+  })
+  @Patch('/:resumeId/social-links')
+  async updateSocialLinks(
+    @Param('resumeId') resumeId: string,
+    @Body() updateSocialLinkDto: SocialLinksDto[]
+  ): Promise<Resume> {
+    return this.resumesService.updateSocialLinks(resumeId, updateSocialLinkDto);
+  }
+
+  @Delete('/social-links/:id')
+  async deleteSocialLink(@Param('id') id: string): Promise<Resume> {
+    return this.resumesService.deleteSocialLink(id);
+  }
+
+  // SKILL PART
+  @Post('/:resumeId/skills')
+  async addSkill(
+    @Param('resumeId') resumeId: string,
+    @Body() addSkillDto: SkillDto
+  ): Promise<Resume> {
+    return this.resumesService.addSkill(resumeId, addSkillDto);
+  }
+
+  @ApiOperation({
+    summary: 'Use this endpoint for update one skill details'
+  })
+  @Patch('/skills/:id')
+  async updateSkill(
+    @Param('id') id: string,
+    @Body() updateSkillDto: SkillDto
+  ): Promise<Resume> {
+    return this.resumesService.updateSkill(id, updateSkillDto);
+  }
+
+  @ApiOperation({
+    summary: 'Use this endpoint for update side skills with drag and drop'
+  })
+  @ApiImplicitBody({
+    name: 'body',
+    type: [SkillDto],
+    content: {}
+  })
+  @Patch('/:resumeId/skills')
+  async updateSkills(
+    @Param('resumeId') resumeId: string,
+    @Body() updateSkillsDto: SkillDto[]
+  ): Promise<Resume> {
+    return this.resumesService.updateSkills(resumeId, updateSkillsDto);
+  }
+
+  @Delete('/skills/:id')
+  async deleteSkills(@Param('id') id: string): Promise<Resume> {
+    return this.resumesService.deleteSkill(id);
   }
 }

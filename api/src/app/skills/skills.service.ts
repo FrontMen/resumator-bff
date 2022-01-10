@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Skill, SkillDocument } from './entity/skill.entity';
 import { Model } from 'mongoose';
-import { CreateSkillDto } from './dto/create-skill.dto';
+
+// entity
+import { Skill, SkillDocument } from './entity/skill.entity';
+
+// dto
+import { CreateSkillDto, UpdateSkillDto } from './dto/create-skill.dto';
 
 @Injectable()
 export class SkillsService {
@@ -14,7 +18,23 @@ export class SkillsService {
     return new this.skillModel(createSkillDto).save();
   }
 
+  async createMany(createSkillDto: CreateSkillDto[]): Promise<Skill[]> {
+    return this.skillModel.insertMany(createSkillDto);
+  }
+
   async getAll(): Promise<Skill[]> {
     return this.skillModel.find();
+  }
+
+  async updateOne(id: string, updateSkillDto: UpdateSkillDto): Promise<Skill> {
+    return this.skillModel.findOneAndUpdate(
+      { _id: id },
+      { ...updateSkillDto },
+      { new: true }
+    );
+  }
+
+  async deleteOne(id: string): Promise<Skill> {
+    return this.skillModel.findOneAndDelete({ _id: id });
   }
 }

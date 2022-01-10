@@ -17,7 +17,8 @@ import {
   SideProject,
   SocialLink,
   Publication,
-  Experience
+  Experience,
+  SkillList
 } from './resume-nested.entity';
 
 export type ResumeDocument = Resume & Document;
@@ -62,6 +63,11 @@ export class Resume extends Base {
   @Prop({ required: false })
   @IsBoolean()
   isImport: boolean;
+
+  @Prop({
+    default: []
+  })
+  skills: SkillList[];
 }
 
 export const ResumeEntity = SchemaFactory.createForClass(Resume);
