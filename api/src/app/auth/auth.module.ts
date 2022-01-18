@@ -12,15 +12,16 @@ import { ConfigService } from '../../config/config.service';
 // module
 import { UsersModule } from '../users/users.module';
 import { ConfigModule } from '../../config/config.module';
+import { RolesModule } from '../roles/roles.module';
 
 // strategies
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
-import { RolesModule } from '../roles/roles.module';
+import { GoogleStrategy } from './strategies/google.strategy';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, LocalStrategy],
+  providers: [AuthService, JwtStrategy, LocalStrategy, GoogleStrategy],
   imports: [
     ConfigModule,
     UsersModule,

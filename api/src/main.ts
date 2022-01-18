@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import * as cookieParser from 'cookie-parser';
 
 // module
 import { AppModule } from './app.module';
@@ -12,6 +13,7 @@ async function bootstrap() {
     methods: 'GET, POST, PUT, DELETE, OPTIONS, PATCH'
   });
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.use(cookieParser());
 
   const config = new DocumentBuilder()
     .setTitle('Resumator-API')

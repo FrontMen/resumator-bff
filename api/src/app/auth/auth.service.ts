@@ -95,4 +95,11 @@ export class AuthService {
       user: foundUser
     };
   }
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  async socialLogin({ user: userDto }: any): Promise<any> {
+    console.log(userDto, 'USER DTO');
+    return userDto;
+  }
 }
