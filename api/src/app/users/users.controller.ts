@@ -14,7 +14,11 @@ import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { APIQuery } from '../../interface';
 
 // constants
-import { usersQuerySwagger } from './constants';
+import {
+  usersQuerySwagger,
+  usersSearchQuerySwagger,
+  usersSortingQuerySwagger
+} from './constants';
 
 // entity
 import { User } from './entity/user.entity';
@@ -32,6 +36,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiQuery(usersQuerySwagger)
+  @ApiQuery(usersSearchQuerySwagger)
+  @ApiQuery(usersSortingQuerySwagger)
   @Get()
   async getAll(@Query() query: APIQuery): Promise<User[]> {
     return this.usersService.getAll(query);

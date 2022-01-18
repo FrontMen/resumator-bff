@@ -28,8 +28,29 @@ export class UsersService {
   ) {}
 
   async getAll(query: APIQuery): Promise<User[]> {
+    const filter = {} as any;
+    const sort = { createdAt: -1 } as { createdAt: number };
+
+    if (query.deactivated) {
+      filter.deactivated = !!query.deactivated;
+    }
+
+    if (query.search) {
+      filter.$expr = {
+        $regexMatch: {
+          input: { $concat: ['$firstName', ' ', '$lastName'] },
+          regex: query.search || '',
+          options: 'i'
+        }
+      };
+    }
+
+    if (query.sort && query.sort === 'oldest') {
+      sort.createdAt = 1;
+    }
+
     return this.userModel
-      .find({ deactivated: !!query.deactivated })
+      .find(filter)
       .populate([
         'role',
         'resume',
@@ -44,6 +65,7 @@ export class UsersService {
           }
         }
       ])
+      .sort(sort)
       .select('-deactivated');
   }
 
