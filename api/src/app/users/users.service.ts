@@ -28,7 +28,7 @@ export class UsersService {
   ) {}
 
   async getAll(query: APIQuery): Promise<User[]> {
-    const filter = {} as any;
+    const filter = {} as { deactivated?: boolean; $expr };
     const sort = { createdAt: -1 } as { createdAt: number };
 
     if (query.deactivated) {

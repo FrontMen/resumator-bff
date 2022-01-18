@@ -42,7 +42,7 @@ export class User extends Base {
   role: Role | string;
 
   @Prop({
-    default: {},
+    default: null,
     type: SchemaTypes.ObjectId,
     ref: Resume.name
   })
