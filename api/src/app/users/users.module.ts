@@ -12,11 +12,13 @@ import { UsersService } from './users.service';
 
 // module
 import { ResumesModule } from '../resumes/resumes.module';
+import { RolesModule } from '../roles/roles.module';
 
 @Module({
   controllers: [UsersController],
   providers: [UsersService],
   imports: [
+    RolesModule,
     ResumesModule,
     MongooseModule.forFeature([{ name: User.name, schema: UserEntity }])
   ],
