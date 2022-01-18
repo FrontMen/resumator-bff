@@ -24,6 +24,7 @@ export class AuthController {
     return this.authService.signUp(signUpDto);
   }
 
+  // TODO: after testing remove token from body
   @Post('/login')
   async login(
     @Body() loginDto: LoginDto,
@@ -37,7 +38,7 @@ export class AuthController {
         domain: 'localhost',
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24)
       })
-      .send(user);
+      .send({ user, token });
   }
 
   // @UseGuards(AuthGuard('google'))

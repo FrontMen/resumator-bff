@@ -6,9 +6,10 @@ import {
   Patch,
   Param,
   Delete,
-  Query
+  Query,
+  UseGuards
 } from '@nestjs/common';
-import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 // interface
 import { APIQuery } from '../../interface';
@@ -23,18 +24,28 @@ import {
 // entity
 import { User } from './entity/user.entity';
 
-// service
+// services
 import { UsersService } from './users.service';
 
 // dto
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
+// decorators
+import { Roles } from '../../decorators';
+
+// guards
+import { JwtAuthGuard } from '../auth/guards';
+import { RolesGuard } from '../../guards';
+
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Roles('admin')
+  @ApiBearerAuth('JWT')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiQuery(usersQuerySwagger)
   @ApiQuery(usersSearchQuerySwagger)
   @ApiQuery(usersSortingQuerySwagger)
