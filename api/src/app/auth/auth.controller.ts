@@ -1,6 +1,17 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Query,
+  Req,
+  Res,
+  UseGuards
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 
 // service
 import { AuthService } from './auth.service';
@@ -11,7 +22,9 @@ import { LoginDto } from './dto/login.dto';
 
 // entity
 import { User } from '../users/entity/user.entity';
+import { AuthGuard } from '@nestjs/passport';
 
+// TODO: after testing remove token from body
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
@@ -24,7 +37,6 @@ export class AuthController {
     return this.authService.signUp(signUpDto);
   }
 
-  // TODO: after testing remove token from body
   @Post('/login')
   async login(
     @Body() loginDto: LoginDto,
@@ -41,20 +53,24 @@ export class AuthController {
       .send({ user, token });
   }
 
-  // @UseGuards(AuthGuard('google'))
-  // @Get('/google')
-  // @HttpCode(HttpStatus.SEE_OTHER)
-  // async googleAuth(@Req() req: Request): Promise<void> {}
-  //
-  // @Get('/google/redirect')
-  // @UseGuards(AuthGuard('google'))
-  // async googleAuthRedirect(
-  //   @Req() req: Request,
-  //   @Res() res: Response
-  // ): Promise<any> {
-  //   await this.authService.socialLogin(req);
-  //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //   // @ts-ignore
-  //   return res.redirect(`http://localhost:3000/`);
-  // }
+  @UseGuards(AuthGuard('google'))
+  @Get('/google')
+  @HttpCode(HttpStatus.SEE_OTHER)
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  async googleAuth(@Req() req: Request): Promise<void> {}
+
+  @Get('/google/redirect')
+  @UseGuards(AuthGuard('google'))
+  async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
+    const userData = await this.authService.socialLogin(req);
+    await res.redirect(
+      `${process.env.FRONT_END_URL}/auth/success?token=${userData.token}`
+    );
+  }
+
+  // !* this endpoint only for testing flow
+  @Get('/success')
+  async success(@Query() query: any): Promise<any> {
+    return { accessToken: query.token, user: JSON.parse(query.user) };
+  }
 }

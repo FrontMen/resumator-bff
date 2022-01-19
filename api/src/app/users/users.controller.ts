@@ -32,7 +32,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 // decorators
-import { Roles } from '../../decorators';
+import { GetUser, Roles } from '../../decorators';
 
 // guards
 import { JwtAuthGuard } from '../auth/guards';
@@ -52,6 +52,13 @@ export class UsersController {
   @Get()
   async getAll(@Query() query: APIQuery): Promise<User[]> {
     return this.usersService.getAll(query);
+  }
+
+  @ApiBearerAuth('JWT')
+  @UseGuards(JwtAuthGuard)
+  @Get('/me')
+  async getMe(@GetUser() user: User) {
+    return user;
   }
 
   @Post()

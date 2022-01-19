@@ -33,7 +33,10 @@ export class User extends Base {
 
   @Prop({ required: false })
   @IsOptional()
-  password: string;
+  password?: string;
+
+  @Prop({ required: true, default: 'local' })
+  provider: string;
 
   @Prop({
     type: SchemaTypes.ObjectId,

@@ -18,6 +18,7 @@ import { User } from '../users/entity/user.entity';
 import { SignUpDto } from './dto/sign-up.dto';
 import { LoginDto } from './dto/login.dto';
 
+// TODO: all tokens need to send by http only, when it will run in prod
 @Injectable()
 export class AuthService {
   constructor(
@@ -57,7 +58,8 @@ export class AuthService {
       ...signUpDto,
       password: hashedPassword,
       role: foundRole.id,
-      deactivated: false
+      deactivated: false,
+      provider: 'local'
     });
 
     const token = this.jwtService.sign(
@@ -96,10 +98,30 @@ export class AuthService {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  async socialLogin({ user: userDto }: any): Promise<any> {
-    console.log(userDto, 'USER DTO');
-    return userDto;
+  async socialLogin({
+    user: userDto
+  }: any): Promise<{ user: User; token: string }> {
+    const role = await this.rolesService.getOneByName('employees');
+    const foundUser = await this.userService.findUserByEmail(userDto.email);
+
+    const token = this.jwtService.sign(
+      { email: userDto.email },
+      { expiresIn: '5d' }
+    );
+
+    if (!foundUser) {
+      const createdUser = await this.userService.create({
+        email: userDto.email,
+        firstName: userDto.firstName,
+        lastName: userDto.lastName,
+        provider: userDto.provider,
+        deactivated: false,
+        role: role.id
+      });
+
+      return { user: createdUser, token };
+    }
+
+    return { user: foundUser, token };
   }
 }
