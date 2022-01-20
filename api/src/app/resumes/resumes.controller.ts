@@ -28,6 +28,7 @@ import { SideProjectsDto } from './dto/side-projects.dto';
 import { SocialLinksDto } from './dto/social-links.dto';
 import { SkillDto } from './dto/skill.dto';
 
+// TODO: change PATCH to PUT if we want to change array
 @ApiTags('Resumes')
 @Controller('resumes')
 export class ResumesController {

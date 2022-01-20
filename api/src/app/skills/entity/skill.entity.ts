@@ -6,6 +6,7 @@ import { Base, BaseSchema } from '../../../decorators';
 
 export type SkillDocument = Skill & Document;
 
+// TODO: validate skill name
 @BaseSchema()
 export class Skill extends Base {
   @Prop({ required: true, unique: true })

@@ -8,6 +8,7 @@ import { Skill, SkillDocument } from './entity/skill.entity';
 // dto
 import { CreateSkillDto, UpdateSkillDto } from './dto/create-skill.dto';
 
+// TODO: remove many skills add it on skills post request
 @Injectable()
 export class SkillsService {
   constructor(

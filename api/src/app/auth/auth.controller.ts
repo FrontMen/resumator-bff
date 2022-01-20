@@ -71,6 +71,6 @@ export class AuthController {
   // !* this endpoint only for testing flow
   @Get('/success')
   async success(@Query() query: any): Promise<any> {
-    return { accessToken: query.token, user: JSON.parse(query.user) };
+    return { accessToken: query.token };
   }
 }
