@@ -5,7 +5,8 @@ import {
   Get,
   Param,
   Patch,
-  Post
+  Post,
+  Put
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiImplicitBody } from '@nestjs/swagger/dist/decorators/api-implicit-body.decorator';
@@ -85,7 +86,7 @@ export class ResumesController {
     type: [EducationDto],
     content: {}
   })
-  @Patch('/:resumeId/education')
+  @Put('/:resumeId/education')
   async updateEducations(
     @Param('resumeId') resumeId: string,
     @Body() updateEducationDto: EducationDto[]
@@ -126,7 +127,7 @@ export class ResumesController {
     type: [ExperienceDto],
     content: {}
   })
-  @Patch('/:resumeId/experience')
+  @Put('/:resumeId/experience')
   async updateExperiences(
     @Param('resumeId') resumeId: string,
     @Body() updateExperienceDto: ExperienceDto[]
@@ -167,7 +168,7 @@ export class ResumesController {
     type: [ExperienceDto],
     content: {}
   })
-  @Patch('/:resumeId/projects')
+  @Put('/:resumeId/projects')
   async updateProjects(
     @Param('resumeId') resumeId: string,
     @Body() updateProjectDto: ProjectDto[]
@@ -208,7 +209,7 @@ export class ResumesController {
     type: [PublicationDto],
     content: {}
   })
-  @Patch('/:resumeId/publications')
+  @Put('/:resumeId/publications')
   async updatePublications(
     @Param('resumeId') resumeId: string,
     @Body() updatePublicationDto: PublicationDto[]
@@ -252,7 +253,7 @@ export class ResumesController {
     type: [SideProjectsDto],
     content: {}
   })
-  @Patch('/:resumeId/side-projects')
+  @Put('/:resumeId/side-projects')
   async updateSideProjects(
     @Param('resumeId') resumeId: string,
     @Body() updateSideProjectDto: SideProjectsDto[]
@@ -296,7 +297,7 @@ export class ResumesController {
     type: [SocialLinksDto],
     content: {}
   })
-  @Patch('/:resumeId/social-links')
+  @Put('/:resumeId/social-links')
   async updateSocialLinks(
     @Param('resumeId') resumeId: string,
     @Body() updateSocialLinkDto: SocialLinksDto[]
@@ -337,7 +338,7 @@ export class ResumesController {
     type: [SkillDto],
     content: {}
   })
-  @Patch('/:resumeId/skills')
+  @Put('/:resumeId/skills')
   async updateSkills(
     @Param('resumeId') resumeId: string,
     @Body() updateSkillsDto: SkillDto[]

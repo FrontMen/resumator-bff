@@ -25,7 +25,9 @@ export class SkillsController {
   constructor(private readonly skillsService: SkillsService) {}
 
   @Post()
-  async create(@Body() createSkillDto: CreateSkillDto): Promise<Skill> {
+  async create(
+    @Body() createSkillDto: CreateSkillDto
+  ): Promise<Skill | Skill[]> {
     return this.skillsService.create(createSkillDto);
   }
 

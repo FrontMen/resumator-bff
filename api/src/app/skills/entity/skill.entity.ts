@@ -9,7 +9,7 @@ export type SkillDocument = Skill & Document;
 // TODO: validate skill name
 @BaseSchema()
 export class Skill extends Base {
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true, unique: true, trim: true })
   name: string;
 }
 

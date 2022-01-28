@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -15,7 +15,29 @@ export class SkillsService {
     @InjectModel(Skill.name) private skillModel: Model<SkillDocument>
   ) {}
 
-  async create(createSkillDto: CreateSkillDto): Promise<Skill> {
+  async create(
+    createSkillDto: CreateSkillDto[] | CreateSkillDto
+  ): Promise<Skill | Skill[]> {
+    const skills = await this.skillModel.find();
+    const skillNames = skills.map(skill => skill.name.toLowerCase());
+    if (Array.isArray(createSkillDto)) {
+      const incomeSkills = createSkillDto.map(skill => skill.name);
+
+      const incomeUniqueSkills = incomeSkills
+        .filter(skill => skillNames.indexOf(skill.toLowerCase()) === -1)
+        .map(skill => ({ name: skill }));
+
+      if (!incomeUniqueSkills.length) {
+        throw new ConflictException('All skills arleady exist');
+      }
+
+      return this.skillModel.insertMany(incomeUniqueSkills);
+    }
+
+    if (skillNames.includes(createSkillDto.name.toLowerCase().trim())) {
+      throw new ConflictException('Skill name already exist');
+    }
+
     return new this.skillModel(createSkillDto).save();
   }
 
