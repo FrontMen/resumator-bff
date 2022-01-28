@@ -31,15 +31,15 @@ export class SkillsController {
     return this.skillsService.create(createSkillDto);
   }
 
-  @ApiImplicitBody({
-    name: 'body',
-    type: [CreateSkillDto],
-    content: {}
-  })
-  @Post('/many')
-  async createMany(@Body() createSkillDto: CreateSkillDto[]): Promise<Skill[]> {
-    return this.skillsService.createMany(createSkillDto);
-  }
+  // @ApiImplicitBody({
+  //   name: 'body',
+  //   type: [CreateSkillDto],
+  //   content: {}
+  // })
+  // @Post('/many')
+  // async createMany(@Body() createSkillDto: CreateSkillDto[]): Promise<Skill[]> {
+  //   return this.skillsService.createMany(createSkillDto);
+  // }
 
   @Get()
   async getAll(): Promise<Skill[]> {
