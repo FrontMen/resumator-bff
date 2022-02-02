@@ -5,6 +5,7 @@
   "author": "Frontmen",
   "scripts": {
     "dev": "docker-compose up --build",
-    "kill": "docker-compose down"
+    "kill": "docker-compose down",
+    "start:prod": "node api/dist/main.js"
   }
 }
