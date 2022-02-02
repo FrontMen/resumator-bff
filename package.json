@@ -6,6 +6,6 @@
   "scripts": {
     "dev": "docker-compose up --build",
     "kill": "docker-compose down",
-    "start:prod": "node api/dist/main.js"
+    "start:prod": "cd ./api && npm run start:dev && node api/dist/main.js"
   }
 }
