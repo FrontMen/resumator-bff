@@ -9,7 +9,7 @@ interface JwtConfig {
 export class ConfigService {
   async mongoConfig() {
     return {
-      uri: 'mongodb+srv://armanrose:armanrose1996&@cluster0.h6utd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority' // process.env.DB_URL
+      uri: process.env.ATLAS_URL
     };
   }
 
