@@ -73,4 +73,10 @@ export class AuthController {
   async success(@Query() query: any): Promise<any> {
     return { accessToken: query.token };
   }
+
+  // !* this endpoint only for certbot SSL verification
+  @Get('/.well-known/acme-challenge/inJyQ1Xgr93V_QGgvIaJjmyE-AzAOF0ffP_8SDBuj8g')
+  async certbotAcmeChallenge(@Query() query: any): Promise<any> {
+    return 'inJyQ1Xgr93V_QGgvIaJjmyE-AzAOF0ffP_8SDBuj8g.s2B09Sc4-eE5gL3NHeyWuY5ogmUczTv5sfuVWxI2t1A';
+  }
 }
