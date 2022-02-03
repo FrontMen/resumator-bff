@@ -5,9 +5,9 @@ import { ApiTags } from '@nestjs/swagger';
 @Controller('.wellknown')
 export class WellKnownController {
   // !* this endpoint only for certbot SSL verification
-  @Get('/acme-challenge/inJyQ1Xgr93V_QGgvIaJjmyE-AzAOF0ffP_8SDBuj8g')
+  @Get('/acme-challenge/SQ1P6LefGguadKnCbBn4GXetCXb5T-80CArQk6TEdJk')
   @Header('content-type', 'text/html')
   async certbotAcmeChallenge(@Query() query: any): Promise<any> {
-    return 'inJyQ1Xgr93V_QGgvIaJjmyE-AzAOF0ffP_8SDBuj8g.s2B09Sc4-eE5gL3NHeyWuY5ogmUczTv5sfuVWxI2t1A';
+    return 'SQ1P6LefGguadKnCbBn4GXetCXb5T-80CArQk6TEdJk.s2B09Sc4-eE5gL3NHeyWuY5ogmUczTv5sfuVWxI2t1A';
   }
 }
