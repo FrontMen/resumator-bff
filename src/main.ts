@@ -5,10 +5,10 @@ import * as cookieParser from 'cookie-parser';
 
 // module
 import { AppModule } from './app.module';
-// import { seedRoles } from './seeds';
+import { seedRoles } from './seeds';
 
 async function bootstrap() {
-  // await seedRoles();
+  await seedRoles();
   const app = await NestFactory.create(AppModule, { cors: true });
   app.enableCors({
     origin: '*',

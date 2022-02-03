@@ -10,7 +10,7 @@ dotenv.config();
 
 export const seedRoles = async () => {
   try {
-    await mongoose.connect(process.env.DB_URL);
+    await mongoose.connect(process.env.ATLAS_URL);
     const roleModel = mongoose.model('Role', RoleEntity);
     const userModel = mongoose.model('User', UserEntity);
 
@@ -24,9 +24,9 @@ export const seedRoles = async () => {
       });
 
       const createdAdmin = await userModel.create({
-        email: 'admin@mail.ru',
-        firstName: 'Admin',
-        lastName: 'Admin',
+        email: 'dave.timmerman@frontmen.nl',
+        firstName: 'Dave',
+        lastName: 'Timmerman',
         password: hashedPassword,
         role: createdAdminRole._id
       });
