@@ -33,6 +33,7 @@ export const seedRoles = async () => {
 
       await createdAdmin.save();
       await createdAdminRole.save();
+      return;
     }
 
     const foundAdmin = await userModel.findOne({ role: foundedAdminRole._id });
