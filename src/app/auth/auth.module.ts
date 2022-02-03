@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 
 // controller
 import { AuthController } from './auth.controller';
+import { WellKnownController } from './wellknown.controller';
 
 // service
 import { AuthService } from './auth.service';
@@ -20,7 +21,7 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 
 @Module({
-  controllers: [AuthController],
+  controllers: [AuthController, WellKnownController],
   providers: [AuthService, JwtStrategy, LocalStrategy, GoogleStrategy],
   imports: [
     ConfigModule,
